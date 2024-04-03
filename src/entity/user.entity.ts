@@ -1,12 +1,16 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Chat } from './chat.entity';
+
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -22,12 +26,20 @@ export class User {
   @Column()
   email: string;
 
-  @OneToMany(() => Chat, (chat) => chat.id)
-  chat: Chat[];
-
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at: Date;
+
+  @OneToMany(() => Chat, (chat) => chat.id)
+  chat: Chat[];
+
+  @BeforeInsert()
+  private beforeInsert() {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
 }
