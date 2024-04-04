@@ -10,7 +10,9 @@ export class UserController {
   async signup(@Body() authDTO: AuthDTO.SignUp) {
     const { email, id, phoneNumber } = authDTO;
     const hasEmail = await this.userService.findByEmail(email);
-    if (hasEmail) throw new ConflictException('이미 사용중인 이메일 입니다.');
+    if (hasEmail) {
+      throw new ConflictException('이미 사용중인 이메일 입니다.');
+    }
 
     const hasId = await this.userService.findById(id);
     if (hasId) {

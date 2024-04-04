@@ -1,29 +1,35 @@
 import {
+  BaseEntity,
   BeforeInsert,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Chat } from './chat.entity';
 
 import * as bcrypt from 'bcrypt';
+import { IsNotEmpty } from 'class-validator';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
+export class User extends BaseEntity {
+  @PrimaryColumn({ type: 'varchar' })
+  @IsNotEmpty()
   id: string;
 
   @Column()
+  @IsNotEmpty()
   password: string;
 
   @Column()
+  @IsNotEmpty()
   phoneNumber: string;
 
   @Column()
+  @IsNotEmpty()
   email: string;
 
   @CreateDateColumn()
