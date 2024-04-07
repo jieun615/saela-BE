@@ -22,6 +22,11 @@ export class UserController {
       throw new ConflictException('이미 사용중인 이메일 입니다.');
     }
 
+    const isId = await id.match(/^[a-z0-9_-]{1,10}$/g);
+    if (!isId) {
+      throw new ConflictException('아이디 형식에 맞지 않습니다.');
+    }
+
     const hasId = await this.userService.findById(id);
     if (hasId) {
       throw new ConflictException('이미 사용중인 아이디입니다.');
