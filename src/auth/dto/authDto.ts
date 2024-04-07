@@ -13,11 +13,7 @@ export namespace AuthDTO {
 
     @IsString()
     @IsNotEmpty()
-    phoneNumber: string;
-
-    @IsString()
     @Length(8, 20)
-    @IsNotEmpty()
     password: string;
   }
 

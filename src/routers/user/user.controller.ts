@@ -8,7 +8,7 @@ export class UserController {
 
   @Post('/signup')
   async signup(@Body() authDTO: AuthDTO.SignUp) {
-    const { email, id, phoneNumber } = authDTO;
+    const { email, id } = authDTO;
 
     const isEmail = await email.match(
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/g,
@@ -30,19 +30,6 @@ export class UserController {
     const hasId = await this.userService.findById(id);
     if (hasId) {
       throw new ConflictException('이미 사용중인 아이디입니다.');
-    }
-
-    const isPhoneNumber = await phoneNumber.match(
-      /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/g,
-    );
-    if (!isPhoneNumber) {
-      throw new ConflictException('전화번호 형식에 맞지 않습니다.');
-    }
-
-    const hasPhoneNumber =
-      await this.userService.findByPhoneNumber(phoneNumber);
-    if (hasPhoneNumber) {
-      throw new ConflictException('이미 등록된 전화번호입니다.');
     }
 
     const isPassword = await authDTO.password.match(

@@ -1,14 +1,9 @@
-import {
-  CreateDateColumn,
-  Entity,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { CreateDateColumn, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Chatroom {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'varchar' })
   id: string;
 
   @CreateDateColumn()

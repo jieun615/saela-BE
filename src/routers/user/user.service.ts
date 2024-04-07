@@ -24,14 +24,6 @@ export class UserService {
     });
   }
 
-  async findByPhoneNumber(phoneNumber: string) {
-    return await this.userRepository.findOne({
-      where: {
-        phoneNumber,
-      },
-    });
-  }
-
   async findByEmail(email: string) {
     return await this.userRepository.findOne({
       where: {

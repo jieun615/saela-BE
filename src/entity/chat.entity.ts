@@ -3,13 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Chat {
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn({ type: 'varchar' })
   id: string;
 
   @Column()
