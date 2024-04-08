@@ -5,7 +5,7 @@ export namespace AuthDTO {
   export class SignUp {
     @IsString()
     @IsNotEmpty()
-    id: string;
+    username: string;
 
     @IsEmail()
     @IsNotEmpty()
@@ -20,7 +20,7 @@ export namespace AuthDTO {
   export class SignIn {
     @IsString()
     @IsNotEmpty()
-    id: string;
+    username: string;
 
     @IsString()
     @Length(8, 20)

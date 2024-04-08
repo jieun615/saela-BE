@@ -16,10 +16,10 @@ export class UserService {
     return await this.userRepository.save(userEntity);
   }
 
-  async findById(id: string) {
+  async findByUserName(username: string) {
     return await this.userRepository.findOne({
       where: {
-        id,
+        username,
       },
     });
   }

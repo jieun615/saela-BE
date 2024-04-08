@@ -6,7 +6,7 @@ import {
   DeleteDateColumn,
   Entity,
   OneToMany,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Chat } from './chat.entity';
@@ -16,9 +16,12 @@ import { IsNotEmpty, Length } from 'class-validator';
 
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
-  @PrimaryColumn({ type: 'varchar' })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   @IsNotEmpty()
-  id: string;
+  username: string;
 
   @Column()
   @Length(8, 20)

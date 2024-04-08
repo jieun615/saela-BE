@@ -9,7 +9,7 @@ import { MailService } from './mail.service';
       useFactory: () => ({
         transport: {
           host: 'smtp.naver.com',
-          port: process.env.EMAILPORT,
+          port: 465,
           auth: {
             user: process.env.EMAILADDRESS,
             pass: process.env.EMAILPASSWORD,

@@ -3,14 +3,17 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Chat {
-  @PrimaryColumn({ type: 'varchar' })
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
 
   @Column()
   text: string;
