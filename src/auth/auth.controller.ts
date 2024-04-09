@@ -1,17 +1,16 @@
-import {
-  Body,
-  ConflictException,
-  Controller,
-  Post,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, ConflictException, Controller, Post } from '@nestjs/common';
 import { UserService } from 'src/routers/user/user.service';
 import { AuthDTO } from './dto/authDto';
-import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly jwtService: JwtService,
+    private authService: AuthService,
+  ) {}
 
   @Post('/signup')
   async signup(@Body() authDTO: AuthDTO.SignUp) {
@@ -46,24 +45,12 @@ export class AuthController {
       throw new ConflictException('비밀번호 형식에 맞지 않습니다.');
     }
 
-    const userEntity = await this.userService.create(authDTO);
+    await this.userService.create(authDTO);
     return '회원가입성공';
   }
 
   @Post('/signin')
   async signin(@Body() authDTO: AuthDTO.SignIn) {
-    const { username, password } = authDTO;
-
-    const user = await this.userService.findByUserName(username);
-    if (!user) {
-      throw new UnauthorizedException('아이디를 확인해주세요.');
-    }
-
-    const samePassword = bcrypt.compare(password, user.password);
-    if (!samePassword) {
-      throw new UnauthorizedException('비밀번호를 확인해주세요.');
-    }
-
-    return '로그인 완료';
+    return await this.authService.signIn(authDTO);
   }
 }

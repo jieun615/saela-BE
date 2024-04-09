@@ -1,36 +1,33 @@
-import { Injectable } from '@nestjs/common';
+import { UserService } from 'src/routers/user/user.service';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthDTO } from './dto/authDto';
 import { JwtService } from '@nestjs/jwt';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  getAccessToken({ user }): String {
-    return this.jwtService.sign(
-      {
-        email: user.email,
-        sub: user.id,
-      },
-      {
-        secret: process.env.ACCESS_TOKEN_SECRET_KEY,
-        expiresIn: '5m',
-      },
-    );
-  }
+  async signIn(authDto: AuthDTO.SignIn) {
+    const { username, password } = authDto;
 
-  setRefreshToken({ user, res }) {
-    const refreshToken = this.jwtService.sign(
-      {
-        email: user.email,
-        sub: user.id,
-      },
-      {
-        secret: process.env.REFRESH_TOKEN_SECRET_KEY,
-        expiresIn: '2w',
-      },
-    );
-    res.setHeader('Set-Cookie', `refreshToken="${refreshToken}`);
-    return;
+    const user = await this.userService.findByUserName(username);
+    if (!user) {
+      throw new UnauthorizedException('아이디를 확인해주세요.');
+    }
+
+    const samePassword = compare(password, user.password);
+    if (!samePassword) {
+      throw new UnauthorizedException('비밀번호를 확인해주세요.');
+    }
+
+    const payload = { id: user.id };
+
+    return this.jwtService.sign(payload, {
+      secret: process.env.SECRET_KEY,
+    });
   }
 }
