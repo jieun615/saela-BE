@@ -16,6 +16,17 @@ export class UserService {
     return await this.userRepository.save(userEntity);
   }
 
+  async saveVerificationCode(email: string, code: string): Promise<void> {
+    const user = await this.findByEmail(email);
+    if (user) {
+      user.verificationCode = code;
+    } else {
+      const newUser = new User();
+      newUser.email = email;
+      newUser.verificationCode = code;
+    }
+  }
+
   async findByUserName(username: string) {
     return await this.userRepository.findOne({
       where: {

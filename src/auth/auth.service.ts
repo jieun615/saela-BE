@@ -3,13 +3,34 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthDTO } from './dto/authDto';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private mailerService: MailerService,
   ) {}
+
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.userService.findByEmail(email);
+    if (user && user.password === password) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
+  async sendVerificationCode(email: string): Promise<void> {
+    const code = Math.floor(Math.random() * 10000).toString();
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Verification code',
+      text: `Your verification code is ${code}`,
+    });
+    await this.userService.
+  }
 
   async signIn(authDto: AuthDTO.SignIn) {
     const { username, password } = authDto;

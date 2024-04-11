@@ -48,4 +48,7 @@ export class User extends BaseEntity {
   private beforeInsert() {
     this.password = bcrypt.hashSync(this.password, 10);
   }
+
+  @Column()
+  verificationCode: string;
 }
