@@ -29,13 +29,22 @@ export class AuthService {
       subject: 'Verification code',
       text: `Your verification code is ${code}`,
     });
-    await this.userService.
+    await this.userService.saveVerificationCode(email, code);
   }
 
-  async signIn(authDto: AuthDTO.SignIn) {
+  async confirmVerificationCode(email: string, code: string): Promise<boolean> {
+    const savedCode = await this.userService.getVerificationCode(email);
+    if (code === savedCode) {
+      await this.userService.clearVerificationCode(email);
+      return true;
+    }
+    return false;
+  }
+
+  async signIn(authDto: AuthDTO.SignIn, user?: any) {
     const { username, password } = authDto;
 
-    const user = await this.userService.findByUserName(username);
+    const userName = await this.userService.findByUserName(username);
     if (!user) {
       throw new UnauthorizedException('아이디를 확인해주세요.');
     }
@@ -45,10 +54,10 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
     }
 
-    const payload = { id: user.id };
+    const payload = { email: user.email, id: user.id };
 
-    return this.jwtService.sign(payload, {
-      secret: process.env.SECRET_KEY,
-    });
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }

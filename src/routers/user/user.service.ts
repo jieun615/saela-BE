@@ -24,6 +24,19 @@ export class UserService {
       const newUser = new User();
       newUser.email = email;
       newUser.verificationCode = code;
+      this.userRepository.create(newUser);
+    }
+  }
+
+  async getVerificationCode(email: string): Promise<string | undefined> {
+    const user = await this.findByEmail(email);
+    return user ? user.verificationCode : undefined;
+  }
+
+  async clearVerificationCode(email: string): Promise<void> {
+    const user = await this.findByEmail(email);
+    if (user) {
+      user.verificationCode = undefined;
     }
   }
 
