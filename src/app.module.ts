@@ -6,6 +6,11 @@ import { AuthModule } from './auth/auth.module';
 import { typeOrmModuleOptions } from './configs/typeorm.config';
 import { MailModule } from './mail/mail.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthService } from './auth/auth.service';
+import { MailController } from './mail/mail.controller';
+import { ChatService } from './routers/chat/chat.service';
+import { AuthController } from './auth/auth.controller';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,7 +24,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '300s' },
     }),
   ],
-  // controllers: [AuthController, MailController],
-  // providers: [AuthService, ChatService, MailService],
+  controllers: [AuthController, MailController],
+  providers: [AuthService, ChatService, ConfigService],
 })
 export class AppModule {}

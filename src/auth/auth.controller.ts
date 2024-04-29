@@ -1,14 +1,12 @@
 import { Body, ConflictException, Controller, Post } from '@nestjs/common';
 import { UserService } from 'src/routers/user/user.service';
 import { AuthDTO } from './dto/authDto';
-import { JwtService } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 
 @Controller()
 export class AuthController {
   constructor(
     private readonly userService: UserService,
-    private readonly jwtService: JwtService,
     private authService: AuthService,
   ) {}
 

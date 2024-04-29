@@ -1,27 +1,28 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { MailController } from './mail.controller';
-import { MailService } from './mail.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     MailerModule.forRootAsync({
       useFactory: () => ({
         transport: {
+          service: 'Naver',
           host: 'smtp.naver.com',
-          port: 465,
+          port: 587,
           auth: {
             user: process.env.EMAILADDRESS,
             pass: process.env.EMAILPASSWORD,
           },
         },
         defaults: {
-          from: `'saela' <${process.env.EMAILADDRESS}>`,
+          from: `'saela' <modules@nestjs.com>`,
         },
       }),
     }),
   ],
   controllers: [MailController],
-  providers: [MailService],
+  providers: [ConfigService],
 })
 export class MailModule {}
