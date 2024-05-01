@@ -24,8 +24,8 @@ export class EmailService {
 
   async sendVerificationToEmail(email: string, code: string): Promise<void> {
     const emailOptions: EmailOptions = {
-      from: process.env.EMAILADDRESS, // 보내는 사람 이메일 주소
-      to: email, // 회원가입한 사람의 받는 이메일 주소
+      from: process.env.EMAILADDRESS,
+      to: email,
       subject: '가입 인증 메일',
       html: `<h1> 인증 코드를 입력하면 가입 인증이 완료됩니다.</h1><br/>${code}`,
     };
